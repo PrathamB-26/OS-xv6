@@ -11,6 +11,10 @@ main(int argc, char *argv[])
   int fd, i, n;
   char buf[128];
   fd = open(argv[1], O_RDONLY);
+  if (fd < 0) {
+    printf(1, "error while file open");
+    exit();
+  }
   lseek(fd, 10, SEEK_SET);
   n = read(fd, buf, 5);
   for(i = 0; i < n; i++)
