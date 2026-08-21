@@ -459,11 +459,11 @@ int sys_lseek(void) {
       return -1;
     }
 
-    if (whence == 0) {
+    if (whence == SEEK_SET) {
       new_offset = offset;
-    } else if (whence == 1) {
+    } else if (whence == SEEK_CUR) {
       new_offset = f->off + offset;
-    } else if (whence == 2) {
+    } else if (whence == SEEK_END) {
       new_offset = f->ip->size - offset;
     } else {
       return -1;
