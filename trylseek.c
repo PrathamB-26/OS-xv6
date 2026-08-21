@@ -17,6 +17,10 @@ main(int argc, char *argv[])
   }
   lseek(fd, 10, SEEK_SET);
   n = read(fd, buf, 5);
+  if (n < 0) {
+    printf(1, "error while read file");
+    exit();
+  }
   for(i = 0; i < n; i++)
     printf(1, "%c", buf[i]);
   printf(1, "\n");
@@ -24,18 +28,30 @@ main(int argc, char *argv[])
 
   lseek(fd, 10, SEEK_CUR);
   n = read(fd, buf, 5);
+  if (n < 0) {
+    printf(1, "error while read file");
+    exit();
+  }
   for(i = 0; i < n; i++)
     printf(1, "%c", buf[i]);
   printf(1, "\n");
 
   lseek(fd, -5, SEEK_END); 
   n = read(fd, buf, 5);
+  if (n < 0) {
+    printf(1, "error while read file");
+    exit();
+  }
   for(i = 0; i < n; i++)
     printf(1, "%c", buf[i]);
   printf(1, "\n");
 
   lseek(fd, 5, SEEK_END); 
   n = read(fd, buf, 5);
+  if (n < 0) {
+    printf(1, "error while read file");
+    exit();
+  }
   for(i = 0; i < n; i++)
     printf(1, "%c", buf[i]);
   printf(1, "\n");

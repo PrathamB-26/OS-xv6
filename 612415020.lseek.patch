@@ -117,7 +117,7 @@ index bc5f356..43220f4 100644
 +#define SYS_lseek  22
 \ No newline at end of file
 diff --git a/sysfile.c b/sysfile.c
-index bfe61b7..7babd29 100644
+index bfe61b7..3d70428 100644
 --- a/sysfile.c
 +++ b/sysfile.c
 @@ -442,3 +442,38 @@ sys_pipe(void)
@@ -141,11 +141,11 @@ index bfe61b7..7babd29 100644
 +      return -1;
 +    }
 +
-+    if (whence == 0) {
++    if (whence == SEEK_SET) {
 +      new_offset = offset;
-+    } else if (whence == 1) {
++    } else if (whence == SEEK_CUR) {
 +      new_offset = f->off + offset;
-+    } else if (whence == 2) {
++    } else if (whence == SEEK_END) {
 +      new_offset = f->ip->size - offset;
 +    } else {
 +      return -1;
@@ -162,10 +162,10 @@ index bfe61b7..7babd29 100644
 \ No newline at end of file
 diff --git a/trylseek.c b/trylseek.c
 new file mode 100644
-index 0000000..11a0768
+index 0000000..e849581
 --- /dev/null
 +++ b/trylseek.c
-@@ -0,0 +1,39 @@
+@@ -0,0 +1,43 @@
 +#include "types.h"
 +#include "fcntl.h"
 +#include "stat.h"
@@ -179,6 +179,10 @@ index 0000000..11a0768
 +  int fd, i, n;
 +  char buf[128];
 +  fd = open(argv[1], O_RDONLY);
++  if (fd < 0) {
++    printf(1, "error while file open");
++    exit();
++  }
 +  lseek(fd, 10, SEEK_SET);
 +  n = read(fd, buf, 5);
 +  for(i = 0; i < n; i++)
