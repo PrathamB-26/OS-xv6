@@ -443,37 +443,39 @@ sys_pipe(void)
   return 0;
 }
 
-int sys_lseek(void) {
+int
+sys_lseek(void)
+{
     int fd, offset, whence, new_offset;
     struct file *f;
 
     if (argfd(0, &fd, &f) < 0) {
-      return -1;
+        return -1;
     }
 
     if (argint(1, &offset) < 0 || argint(2, &whence) < 0) {
-      return -1;
+        return -1;
     }
 
     if (f->type != FD_INODE) {
-      return -1;
+        return -1;
     }
 
     if (whence == SEEK_SET) {
-      new_offset = offset;
+        new_offset = offset;
     } else if (whence == SEEK_CUR) {
-      new_offset = f->off + offset;
+        new_offset = (int)f->off + offset;
     } else if (whence == SEEK_END) {
-      new_offset = f->ip->size - offset;
+        new_offset = (int)f->ip->size + offset;
     } else {
-      return -1;
+        return -1;
     }
 
-    if (new_offset < 0 || (new_offset > f->ip->size)) {
-      return -1;
+    if (new_offset < 0) {
+        return -1;
     }
 
-    f->off = new_offset;
+    f->off = (uint)new_offset;
 
-    return f->off;
+    return new_offset;
 }
